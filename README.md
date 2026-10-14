@@ -6,6 +6,16 @@
 
 **Стек:** ASP.NET Core MVC (.NET 10) · Entity Framework Core 10 · SQL Server LocalDB · Razor · CSS Grid · Dependency Injection
 
+**Архітектура:** Clean Architecture, 4 проєкти в одному рішенні
+
+```
+Kino.Web  ──►  Kino.Application  ──►  Kino.Domain
+   │                  ▲                    ▲
+   └──►  Kino.Infrastructure ──────────────┘
+```
+
+Детально про шари та зв'язки між ними: [README-ARCHITECTURE.md](README-ARCHITECTURE.md)
+
 ---
 
 ## Скріншоти
@@ -522,8 +532,8 @@ dotnet ef database update
 
 Сайт багатомовний: перемикач мови в шапці (`UA | EN | FR`), вибір зберігається в cookie на рік.
 
-- **Переклади** — JSON-файли `Kino.PL/Resources/SharedResource.{uk-UA|en-US|fr-FR}.json` з вкладеними ключами (`Catalog.Title`, `Validation.TitleRequired` …).
-- **`JsonStringLocalizer` / `JsonStringLocalizerFactory`** (`Kino.PL/Localization`) — власна реалізація `IStringLocalizer`, що читає JSON замість `.resx`, з кешем і fallback на українську.
+- **Переклади** — JSON-файли `Kino.Web/Resources/SharedResource.{uk-UA|en-US|fr-FR}.json` з вкладеними ключами (`Catalog.Title`, `Validation.TitleRequired` …).
+- **`JsonStringLocalizer` / `JsonStringLocalizerFactory`** (`Kino.Web/Localization`) — власна реалізація `IStringLocalizer`, що читає JSON замість `.resx`, з кешем і fallback на українську.
 - **В'юхи** — `@L["ключ"]` (`IStringLocalizer<SharedResource>`) і `@H["ключ"]` для рядків з HTML; `<html lang>` змінюється разом з мовою.
 - **Валідація** — у `[Display]` і `ErrorMessage` стоять ключі, їх перекладає `AddDataAnnotationsLocalization`; власні атрибути та повідомлення model binding теж перекладені (і на сервері, і на клієнті).
 - **Визначення мови:** `?culture=en-US` → cookie → `Accept-Language` браузера → українська за замовчуванням.

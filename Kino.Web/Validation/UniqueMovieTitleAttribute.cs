@@ -1,0 +1,34 @@
+using System.ComponentModel.DataAnnotations;
+using Kino.Application.Interfaces;
+using Kino.Web.ViewModels;
+
+namespace Kino.Web.Validation;
+
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+public sealed class UniqueMovieTitleAttribute : ValidationAttribute
+{
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    {
+        if (value is not string title || string.IsNullOrWhiteSpace(title))
+        {
+            return ValidationResult.Success;
+        }
+
+        if (validationContext.GetService(typeof(IMovieService)) is not IMovieService movieService)
+        {
+            return ValidationResult.Success;
+        }
+
+        var currentId = (validationContext.ObjectInstance as MovieViewModel)?.Id ?? 0;
+        var normalized = title.Trim();
+
+        if (movieService.IsTitleUnique(normalized, currentId))
+        {
+            return ValidationResult.Success;
+        }
+
+        return new ValidationResult(
+            validationContext.Localize("Validation.UniqueTitle", normalized),
+            validationContext.MemberName is null ? null : new[] { validationContext.MemberName });
+    }
+}

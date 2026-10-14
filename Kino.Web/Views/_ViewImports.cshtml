@@ -1,0 +1,10 @@
+@using Kino.Web
+@using Kino.Application.DTO
+@using Kino.Web.ViewModels
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@* L — переклад звичайних рядків, H — рядків з HTML-розміткою (аргументи все одно екрануються) *@
+@inject IStringLocalizer<SharedResource> L
+@inject IHtmlLocalizer<SharedResource> H
